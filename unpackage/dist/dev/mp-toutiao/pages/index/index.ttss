@@ -88,8 +88,8 @@
 }
 .homeLayout .select .date .text.data-v-1cf27b2a {
   margin-left: 5rpx;
-  font-size: 30rpx;
-  line-height: 30rpx;
+  font-size: 32rpx;
+  line-height: 32rpx;
 }
 .homeLayout .select .content.data-v-1cf27b2a {
   width: 720rpx;
@@ -112,4 +112,18 @@
 }
 .homeLayout .select .content scroll-view .box.data-v-1cf27b2a:last-child {
   margin-right: 30rpx;
+}
+.homeLayout .theme.data-v-1cf27b2a {
+  padding: 50rpx 0;
+}
+.homeLayout .theme .more.data-v-1cf27b2a {
+  font-size: 32rpx;
+  color: #999;
+}
+.homeLayout .theme .content.data-v-1cf27b2a {
+  margin-top: 30rpx;
+  padding: 0 30rpx;
+  display: grid;
+  gap: 15rpx;
+  grid-template-columns: repeat(3, 1fr);
 }

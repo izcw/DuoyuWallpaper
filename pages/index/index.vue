@@ -28,12 +28,10 @@
 
 		<view class="select">
 			<common-title>
-				<template #name>
-					每日推荐
-				</template>
+				<template #name>每日推荐</template>
 				<template #custom>
 					<view class="date">
-						<uni-icons type="calendar" size="18" color="#28b389"></uni-icons>
+						<uni-icons type="calendar" size="20" color="#28b389"></uni-icons>
 						<view class="text">
 							<uni-dateformat :date="Date.now()" format="dd日"></uni-dateformat>
 						</view>
@@ -48,6 +46,19 @@
 				</scroll-view>
 			</view>
 		</view><!-- 每日精选 -->
+
+		<view class="theme">
+			<common-title>
+				<template #name>专题精选</template>
+				<template #custom>
+					<navigator url="" class="more">More+</navigator>
+				</template>
+			</common-title>
+			<view class="content">
+				<theme-item v-for="item in 8"></theme-item>
+				<theme-item isMore="true"></theme-item>
+			</view>
+		</view> <!-- 专题精选 -->
 	</view>
 </template>
 
@@ -129,16 +140,17 @@
 		// 每日精选
 		.select {
 			padding-top: 50rpx;
-			
+
 			// 日期
-			.date{
+			.date {
 				color: #28b389;
 				display: flex;
 				align-items: center;
-				.text{
+
+				.text {
 					margin-left: 5rpx;
-					font-size: 30rpx;
-					line-height: 30rpx;
+					font-size: 32rpx;
+					line-height: 32rpx;
 				}
 			}
 
@@ -167,6 +179,25 @@
 						}
 					}
 				}
+			}
+		}
+
+		// 专题精选
+		.theme {
+			padding: 50rpx 0;
+
+			.more {
+				font-size: 32rpx;
+				color: #999;
+			}
+
+			.content {
+				margin-top: 30rpx;
+				padding: 0 30rpx;
+				display: grid;
+				gap: 15rpx;
+				grid-template-columns: repeat(3, 1fr);
+
 			}
 		}
 	}
