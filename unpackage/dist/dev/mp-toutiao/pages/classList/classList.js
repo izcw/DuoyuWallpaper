@@ -7,7 +7,7 @@ function _sfc_render(_ctx, _cache) {
     a: common_vendor.f(9, (item, k0, i0) => {
       return {};
     }),
-    b: common_assets._imports_0$2
+    b: common_assets._imports_0
   };
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-104357ab"], ["__file", "/Users/izcw/Desktop/我的项目/DuoyuWallpaper/pages/classList/classList.vue"]]);

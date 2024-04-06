@@ -2,6 +2,10 @@
 	import {
 		ref
 	} from 'vue';
+	import {
+		getStatusBarHeight,
+		getTitleBarHeight
+	} from "@/utils/system.js"
 	// 遮罩状态
 	const maskState = ref(true)
 	const maskChange = () => {
@@ -26,10 +30,20 @@
 	const clickScoreClose = () => {
 		scorePopup.value.close()
 	}
-	
-	const submiScore = ()=>{
+
+	const submiScore = () => {
 		console.log("确认评分");
 		scorePopup.value.close()
+	}
+
+	let {
+		height
+	} = uni.getMenuButtonBoundingClientRect(); //获取右上角胶囊按钮
+	
+	
+	// 返回上一页
+	const goBack =()=>{
+		uni.navigateBack()
 	}
 </script>
 
@@ -41,7 +55,12 @@
 			</swiper-item>
 		</swiper>
 		<view class="mask" v-show="maskState">
-			<view class="goBack"></view>
+			<!-- #ifdef MP-WEIXIN -->
+			<view class="goBack" @click="goBack" :style="{top:getStatusBarHeight()+'px',width:height+'px',height:height+'px'}">
+				<uni-icons type="back" color="#ccc" size="20"></uni-icons>
+			</view>
+			<!-- #endif -->
+
 			<view class="count">
 				3 / 9
 			</view>
@@ -162,7 +181,18 @@
 				width: fit-content; //根据内容给宽
 			}
 
-			.goBack {}
+			.goBack {
+				background: rgba(255, 255, 255, 0.4);
+				left: 20rpx;
+				margin: 4px 0;
+				border-radius: 50%;
+				top: 0;
+				backdrop-filter: blur(10rpx);
+				border: 1rpx solid rgba(255, 255, 255, 0.3);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
 
 			.count {
 				top: 10vh;
@@ -337,10 +367,11 @@
 					width: 80rpx;
 					line-height: 1em;
 					text-align: right;
-					white-space:nowrap;
+					white-space: nowrap;
 				}
 			}
-			.footer{
+
+			.footer {
 				padding: 10rpx 0;
 				display: flex;
 				align-items: center;

@@ -1,6 +1,7 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
 const common_assets = require("../../common/assets.js");
+require("../../utils/system.js");
 if (!Array) {
   const _easycom_uni_dateformat2 = common_vendor.resolveComponent("uni-dateformat");
   const _easycom_uni_icons2 = common_vendor.resolveComponent("uni-icons");
@@ -41,6 +42,7 @@ const _sfc_main = {
       console.log("确认评分");
       scorePopup.value.close();
     };
+    common_vendor.index.getMenuButtonBoundingClientRect();
     return (_ctx, _cache) => {
       return {
         a: common_vendor.f(5, (item, k0, i0) => {

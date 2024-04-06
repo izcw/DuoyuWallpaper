@@ -1,10 +1,60 @@
+<script setup>
+import { ref } from 'vue';
+	const bannerList = ref([])
+	
+	const getBanner = async () => {
+		let res = await uni.request({
+			url: "https://tea.qingnian8.com/api/bizhi/homeBanner",
+			header: {
+				'access-key': "521298"
+			}
+		})
+		if(res.data.errCode === 0){
+			bannerList.value = res.data.data
+		}
+	}
+	getBanner()
+	
+	const randomList = ref([])
+	const getDayRandom = async () => {
+		let res = await uni.request({
+			url: "https://tea.qingnian8.com/api/bizhi/randomWall",
+			header: {
+				'access-key': "521298"
+			}
+		})
+		if(res.data.errCode === 0){
+			randomList.value = res.data.data
+		}
+	}
+	getDayRandom()
+	
+	const noticeList = ref([])
+	const getNotice = async () => {
+		let res = await uni.request({
+			url: "https://tea.qingnian8.com/api/bizhi/wallNewsList",
+			data:{
+				select:true
+			},
+			header: {
+				'access-key': "521298"
+			}
+		})
+		if(res.data.errCode === 0){
+			noticeList.value = res.data.data
+		}
+	}
+	getNotice()
+</script>
+
 <template>
 	<view class="homeLayout pageBg">
+		<custom-nav-bar title="首页"></custom-nav-bar>
 		<view class="banner">
 			<swiper indicator-dots indicator-color="rgba(255,255,255,0.5)" indicator-active-color="#fff" autoplay
 				circular>
-				<swiper-item v-for="item in 3">
-					<image src="../../common/images/banner3.jpg" mode="aspectFill"></image>
+				<swiper-item v-for="item in bannerList" :key="item._id">
+					<image :src="item.picurl" mode="aspectFill"></image>
 				</swiper-item>
 			</swiper>
 		</view>
@@ -16,8 +66,10 @@
 			</view>
 			<view class="center">
 				<swiper vertical autoplay interval="1500" duration="300" circular>
-					<swiper-item v-for="item in 3">
-						公告公告公告公告公告公告公告公告公告公告公告公告
+					<swiper-item v-for="item in noticeList" :key="item._id">
+						<navigator url="/pages/notice/detail">
+							{{item.title}}
+						</navigator>
 					</swiper-item>
 				</swiper>
 			</view>
@@ -40,9 +92,9 @@
 			</common-title>
 			<view class="content">
 				<scroll-view scroll-x>
-						<navigator url="/pages/preView/preView" class="box" v-for="item in 8">
-							<image src="../../common/images/classify1.jpg" mode="aspectFill"></image>
-						</navigator>
+					<navigator url="/pages/preView/preView" class="box" v-for="item in randomList" :key="item._id">
+						<image :src="item.smallPicurl" mode="aspectFill"></image>
+					</navigator>
 				</scroll-view>
 			</view>
 		</view><!-- 每日精选 -->
@@ -61,10 +113,6 @@
 		</view> <!-- 专题精选 -->
 	</view>
 </template>
-
-<script setup>
-
-</script>
 
 <style lang="scss" scoped>
 	.homeLayout {
@@ -113,8 +161,11 @@
 					font-weight: bold;
 					font-size: 28rpx;
 				}
-				:deep(){ //css控制，穿透组件内部
-					.uni-icons{
+
+				:deep() {
+
+					//css控制，穿透组件内部
+					.uni-icons {
 						color: $brand-theme-color !important;
 					}
 				}
@@ -157,12 +208,15 @@
 					font-size: 32rpx;
 					line-height: 32rpx;
 				}
-				:deep(){ //css控制，穿透组件内部
-					.uni-icons{
+
+				:deep() {
+
+					//css控制，穿透组件内部
+					.uni-icons {
 						color: $brand-theme-color !important;
 					}
 				}
-				
+
 			}
 
 			.content {
