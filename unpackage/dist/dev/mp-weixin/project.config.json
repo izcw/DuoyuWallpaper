@@ -1,0 +1,39 @@
+{
+  "description": "项目配置文件。",
+  "packOptions": {
+    "ignore": [],
+    "include": []
+  },
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "postcss": false,
+    "minified": false,
+    "newFeature": true,
+    "bigPackageSizeSupport": true,
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    }
+  },
+  "compileType": "miniprogram",
+  "libVersion": "3.3.5",
+  "appid": "wx1b8eb933ae3909eb",
+  "projectname": "DuoyuWallpaper",
+  "condition": {
+    "miniprogram": {
+      "list": [
+        {
+          "name": "pages/preView/preView",
+          "pathName": "pages/preView/preView",
+          "query": ""
+        }
+      ]
+    }
+  },
+  "editorSetting": {
+    "tabIndent": "insertSpaces",
+    "tabSize": 2
+  }
+}

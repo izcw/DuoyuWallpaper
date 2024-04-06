@@ -1,5 +1,5 @@
 <template>
-	<view class="homeLayout">
+	<view class="homeLayout pageBg">
 		<view class="banner">
 			<swiper indicator-dots indicator-color="rgba(255,255,255,0.5)" indicator-active-color="#fff" autoplay
 				circular>
@@ -11,7 +11,7 @@
 
 		<view class="notice">
 			<view class="left">
-				<uni-icons type="sound-filled" size="20" color="#28b389"></uni-icons>
+				<uni-icons type="sound-filled" size="20"></uni-icons>
 				<text class="text">公告</text>
 			</view>
 			<view class="center">
@@ -31,7 +31,7 @@
 				<template #name>每日推荐</template>
 				<template #custom>
 					<view class="date">
-						<uni-icons type="calendar" size="20" color="#28b389"></uni-icons>
+						<uni-icons type="calendar" size="20"></uni-icons>
 						<view class="text">
 							<uni-dateformat :date="Date.now()" format="dd日"></uni-dateformat>
 						</view>
@@ -40,9 +40,9 @@
 			</common-title>
 			<view class="content">
 				<scroll-view scroll-x>
-					<view class="box" v-for="item in 8">
-						<image src="../../common/images/classify1.jpg" mode="aspectFill"></image>
-					</view>
+						<navigator url="/pages/preView/preView" class="box" v-for="item in 8">
+							<image src="../../common/images/classify1.jpg" mode="aspectFill"></image>
+						</navigator>
 				</scroll-view>
 			</view>
 		</view><!-- 每日精选 -->
@@ -109,9 +109,14 @@
 				justify-content: center;
 
 				.text {
-					color: #28b389;
+					color: $brand-theme-color;
 					font-weight: bold;
 					font-size: 28rpx;
+				}
+				:deep(){ //css控制，穿透组件内部
+					.uni-icons{
+						color: $brand-theme-color !important;
+					}
 				}
 			}
 
@@ -143,7 +148,7 @@
 
 			// 日期
 			.date {
-				color: #28b389;
+				color: $brand-theme-color;
 				display: flex;
 				align-items: center;
 
@@ -152,6 +157,12 @@
 					font-size: 32rpx;
 					line-height: 32rpx;
 				}
+				:deep(){ //css控制，穿透组件内部
+					.uni-icons{
+						color: $brand-theme-color !important;
+					}
+				}
+				
 			}
 
 			.content {
