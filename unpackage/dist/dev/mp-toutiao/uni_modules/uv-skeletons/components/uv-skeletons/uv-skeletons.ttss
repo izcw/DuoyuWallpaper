@@ -1,0 +1,78 @@
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+view.data-v-cf66e016, scroll-view.data-v-cf66e016, swiper-item.data-v-cf66e016 {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  flex-grow: 0;
+  flex-basis: auto;
+  align-items: stretch;
+  align-content: flex-start;
+}
+.uv-skeleton__line.data-v-cf66e016 {
+  height: 32rpx;
+}
+.uv-skeleton__line--sm.data-v-cf66e016 {
+  height: 24rpx;
+  margin-bottom: 30rpx;
+}
+.uv-skeleton__line--lg.data-v-cf66e016 {
+  height: 48rpx;
+  margin-bottom: 30rpx;
+}
+.uv-skeleton--static.data-v-cf66e016 {
+  background: linear-gradient(90deg, #F1F2F4 25%, #e6e6e6 37%, #F1F2F4 50%);
+  background-size: 400% 100%;
+}
+.uv-skeleton--radius.data-v-cf66e016 {
+  border-radius: 8rpx;
+}
+.uv-skeleton--round.data-v-cf66e016 {
+  border-radius: 30rpx;
+}
+.uv-skeleton__avatar.data-v-cf66e016 {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50rpx;
+}
+.uv-skeleton__avatar--sm.data-v-cf66e016 {
+  width: 50rpx;
+  height: 50rpx;
+  border-radius: 25rpx;
+}
+.uv-skeleton__avatar--lg.data-v-cf66e016 {
+  width: 200rpx;
+  height: 200rpx;
+  border-radius: 100rpx;
+}
+.uv-skeleton__group.data-v-cf66e016 {
+  display: flex;
+  flex-direction: row;
+}
+.uv-skeleton__group__sub.data-v-cf66e016 {
+  flex: 1;
+}
+.uv-skeleton--animation.data-v-cf66e016 {
+  background: linear-gradient(90deg, #F1F2F4 25%, #e6e6e6 37%, #F1F2F4 50%);
+  background-size: 400% 100%;
+  animation: skeleton-cf66e016 1.8s ease infinite;
+}
+@keyframes skeleton-cf66e016 {
+0% {
+    background-position: 100% 50%;
+}
+100% {
+    background-position: 0 50%;
+}
+}

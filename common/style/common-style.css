@@ -10,3 +10,12 @@ swiper-item {
 		linear-gradient(to right, #beecd8 20%, #F4E2D8);
 	min-height: 80vh;
 }
+
+.loadingLayout{
+	padding: 30rpx 0;
+}
+
+.safe-area-inset-bottom{ /* 底部安全区 */
+	height: env(safe-area-inset-bottom);
+}
+

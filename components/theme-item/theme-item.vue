@@ -1,12 +1,32 @@
+<script setup>
+	import {getTimeAgoDescription} from "@/utils/common.js"
+	defineProps({
+		isMore: {
+			typeo: Boolean,
+			default: false
+		},
+		item: {
+			type: Object,
+			default () {
+				return {
+					name: "默认名称",
+					picurl: "@/common/images/preview2.jpg",
+					updateTime: Date.now() - 1000 * 60 * 60 * 5
+				}
+			}
+		}
+	})
+</script>
+
 <template>
 	<view class="themeItem">
-		<navigator url="/pages/classList/classList" class="box" v-if="!isMore">
-			<image class="pic" src="../../common/images/preview2.jpg" mode="aspectFill"></image>
-			<view class="mask">明细美女</view>
-			<view class="tab">3天前更新</view>
+		<navigator :url="'/pages/classList/classList?id='+item._id+'&name='+item.name" class="box" v-if="!isMore">
+			<image class="pic" :src="item.picurl" mode="aspectFill"></image>
+			<view class="mask">{{item.name}}</view>
+			<view class="tab">{{getTimeAgoDescription(item.updateTime)}}天前更新</view>
 		</navigator>
 		<navigator url="/pages/classify/classify" open-type="reLaunch" class="box more" v-else>
-			<image class="pic" src="../../common/images/more.jpg" mode="aspectFill"></image>
+			<image class="pic" src="/common/images/more.jpg" mode="aspectFill"></image>
 			<view class="mask">
 				<uni-icons type="more-filled" size="34" color="#fff"></uni-icons>
 				<text class="text">更多</text>
@@ -14,15 +34,6 @@
 		</navigator>
 	</view>
 </template>
-
-<script setup>
-	defineProps({
-		isMore: {
-			typeo: Boolean,
-			default: false
-		}
-	})
-</script>
 
 <style lang="scss" scoped>
 	.themeItem {

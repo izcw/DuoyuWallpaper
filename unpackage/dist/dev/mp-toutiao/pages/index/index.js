@@ -1,5 +1,7 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
+const api_apis = require("../../api/apis.js");
+require("../../utils/request.js");
 if (!Array) {
   const _easycom_custom_nav_bar2 = common_vendor.resolveComponent("custom-nav-bar");
   const _easycom_uni_icons2 = common_vendor.resolveComponent("uni-icons");
@@ -21,46 +23,28 @@ const _sfc_main = {
   setup(__props) {
     const bannerList = common_vendor.ref([]);
     const getBanner = async () => {
-      let res = await common_vendor.index.request({
-        url: "https://tea.qingnian8.com/api/bizhi/homeBanner",
-        header: {
-          "access-key": "521298"
-        }
-      });
-      if (res.data.errCode === 0) {
-        bannerList.value = res.data.data;
-      }
+      let res = await api_apis.apiGetBanner();
+      bannerList.value = res.data;
     };
     getBanner();
     const randomList = common_vendor.ref([]);
     const getDayRandom = async () => {
-      let res = await common_vendor.index.request({
-        url: "https://tea.qingnian8.com/api/bizhi/randomWall",
-        header: {
-          "access-key": "521298"
-        }
-      });
-      if (res.data.errCode === 0) {
-        randomList.value = res.data.data;
-      }
+      let res = await api_apis.apiGetDayRandom();
+      randomList.value = res.data;
     };
     getDayRandom();
     const noticeList = common_vendor.ref([]);
     const getNotice = async () => {
-      let res = await common_vendor.index.request({
-        url: "https://tea.qingnian8.com/api/bizhi/wallNewsList",
-        data: {
-          select: true
-        },
-        header: {
-          "access-key": "521298"
-        }
-      });
-      if (res.data.errCode === 0) {
-        noticeList.value = res.data.data;
-      }
+      let res = await api_apis.apiGetNotice({ select: true });
+      noticeList.value = res.data;
     };
     getNotice();
+    const classifyList = common_vendor.ref([]);
+    const getClassify = async () => {
+      let res = await api_apis.apiGetClassify({ select: true });
+      classifyList.value = res.data;
+    };
+    getClassify();
     return (_ctx, _cache) => {
       return {
         a: common_vendor.p({
@@ -101,9 +85,13 @@ const _sfc_main = {
             b: item._id
           };
         }),
-        i: common_vendor.f(8, (item, k0, i0) => {
+        i: common_vendor.f(classifyList.value, (item, k0, i0) => {
           return {
-            a: "1cf27b2a-7-" + i0
+            a: item._id,
+            b: "1cf27b2a-7-" + i0,
+            c: common_vendor.p({
+              item
+            })
           };
         }),
         j: common_vendor.p({
