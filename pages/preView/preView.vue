@@ -6,6 +6,32 @@
 		getStatusBarHeight,
 		getTitleBarHeight
 	} from "@/utils/system.js"
+	import {
+		onLoad
+	} from "@dcloudio/uni-app"
+	import {
+		apiGetSetupScore
+	} from "@/api/apis.js"
+
+	const currentId = ref(null)
+	const currentIndex = ref(0);
+	const classList = ref([]);
+
+	// 存看过的图，减少网络请求消耗
+	const readImags = ref([])
+	const currentInfo = ref(null); // 信息
+	const isScore = ref(false) //判断有没有评分
+
+	// 获取缓存中的数据
+	const strogClassList = uni.getStorageSync("strogClassList") || [];
+	// 将小图换成大图
+	classList.value = strogClassList.map(item => {
+		return {
+			...item,
+			picurl: item.smallPicurl.replace("_small.webp", ".jpg")
+		}
+	})
+
 	// 遮罩状态
 	const maskState = ref(true)
 	const maskChange = () => {
@@ -25,44 +51,102 @@
 	const scorePopup = ref(null)
 	const userScore = ref(0)
 	const clickScore = () => {
+		if (currentInfo.value.userScore) {
+			isScore.value = true;
+			userScore.value = currentInfo.value.userScore;
+		}
 		scorePopup.value.open()
 	}
 	const clickScoreClose = () => {
 		scorePopup.value.close()
+		userScore.value = 0;
+		isScore.value = false;
 	}
 
-	const submiScore = () => {
-		console.log("确认评分");
-		scorePopup.value.close()
+	// 确认评分
+	const submiScore = async () => {
+		uni.showLoading({
+			title: "加载中..."
+		})
+		let {
+			classid,
+			_id: wallId
+		} = currentInfo.value;
+		let res = await apiGetSetupScore({
+			classid,
+			wallId,
+			userScore: userScore.value
+		})
+		uni.hideLoading()
+		if (res.errCode === 0) {
+			uni.showToast({
+				title: "评分成功",
+				icon: "none"
+			})
+			classList.value[currentIndex.value].userScore = userScore.value;
+			uni.setStorageSync("strogClassList", classList.value)
+			clickScoreClose()
+		}
 	}
 
 	let {
 		height
 	} = uni.getMenuButtonBoundingClientRect(); //获取右上角胶囊按钮
-	
-	
+
+
 	// 返回上一页
-	const goBack =()=>{
+	const goBack = () => {
 		uni.navigateBack()
+	}
+
+	onLoad((e) => {
+		// 获取url id，知道点击的图片
+		currentId.value = e.id
+		currentIndex.value = classList.value.findIndex(item => {
+			return item._id == currentId.value
+		})
+		currentInfo.value = classList.value[currentIndex.value]
+		readImages()
+	})
+
+	// 改变swiper的index
+	const swiperChange = (e) => {
+		currentIndex.value = e.detail.current;
+		currentInfo.value = classList.value[currentIndex.value]
+		readImages()
+	}
+
+	// 加载三张图，当前，前面，后面的图，提升用户体验
+	const readImages = () => {
+		readImags.value.push(
+			currentIndex.value <= 0 ? classList.value.length - 1 : currentIndex.value - 1,
+			currentIndex.value,
+			currentIndex.value >= classList.value.length - 1 ? 0 : currentIndex.value + 1
+		)
+		readImags.value = [...new Set(readImags.value)]
 	}
 </script>
 
 <template>
 	<view class="preView">
-		<swiper circular>
-			<swiper-item v-for="item in 5">
-				<image @click="maskChange" src="../../common/images/classify1.jpg" mode="aspectFill"></image>
+		<swiper circular :current="currentIndex" @change="swiperChange">
+			<swiper-item v-for="(item,index) in classList" :key="item._id">
+				<!-- v-if="index == currentIndex" 如果 index == currentIndex就渲染，节省带宽消耗-->
+				<!-- 改进，将看过的图片存进数组中，readImags -->
+				<image v-if="readImags.includes(index)" @click="maskChange" :src="item.picurl" mode="aspectFill">
+				</image>
 			</swiper-item>
 		</swiper>
 		<view class="mask" v-show="maskState">
 			<!-- #ifdef MP-WEIXIN -->
-			<view class="goBack" @click="goBack" :style="{top:getStatusBarHeight()+'px',width:height+'px',height:height+'px'}">
+			<view class="goBack" @click="goBack"
+				:style="{top:getStatusBarHeight()+'px',width:height+'px',height:height+'px'}">
 				<uni-icons type="back" color="#ccc" size="20"></uni-icons>
 			</view>
 			<!-- #endif -->
 
 			<view class="count">
-				3 / 9
+				{{currentIndex+1}} / {{classList.length}}
 			</view>
 			<view class="time">
 				<uni-dateformat :date="Date.now()" format="hh:mm"></uni-dateformat>
@@ -77,7 +161,7 @@
 				</view>
 				<view class="box" @click="clickScore">
 					<uni-icons type="star" size="20"></uni-icons>
-					<view class="text">5分</view>
+					<view class="text">{{currentInfo.score}}分</view>
 				</view>
 				<view class="box">
 					<uni-icons type="download" size="20"></uni-icons>
@@ -99,31 +183,37 @@
 					<view class="content">
 						<view class="row">
 							<view class="label">壁纸ID： </view>
-							<text selectable class="value">6374thff</text>
+							<text selectable class="value">{{currentInfo._id}}</text>
 						</view>
-						<view class="row">
+						<!-- <view class="row">
 							<view class="label">分类： </view>
 							<text selectable class="value class">
 								明星美女
+							</text>
+						</view> -->
+						<view class="row">
+							<view class="label">发布者： </view>
+							<text selectable class="value class">
+								{{currentInfo.nickname}}
 							</text>
 						</view>
 						<view class="row">
 							<view class="label">评分： </view>
 							<view selectable class="value roteBox">
-								<uni-rate v-model="value" value="3" size="16" readonly touchable />
-								<text class="score">5分</text>
+								<uni-rate v-model="value" :value="currentInfo.score" size="16" readonly touchable />
+								<text class="score">{{currentInfo.score}}分</text>
 							</view>
 						</view>
 						<view class="row">
 							<view class="label">摘要： </view>
 							<text selectable class="value">
-								摘要文字，摘要的说法蛋糕文字，摘要分的说法个文字，摘梵蒂冈要文字，摘要文字，摘要文字，摘要文字，的说法季后赛得分的说法还是大进口国
+								{{currentInfo.description}}
 							</text>
 						</view>
 						<view class="row">
 							<view class="label">标签： </view>
 							<view selectable class="value tabs">
-								<view class="tab" v-for="item in 9">标签名{{item}}</view>
+								<view class="tab" v-for="item in currentInfo.tabs">标签名{{item}}</view>
 							</view>
 						</view>
 						<view class="copyright">
@@ -138,16 +228,16 @@
 			<view class="scorePopup">
 				<view class="popHeader">
 					<view></view>
-					<view class="title">壁纸评分</view>
+					<view class="title">{{isScore?'评分过了～':'壁纸评分'}}</view>
 					<view class="close" @click="clickScoreClose">
 						<uni-icons type="closeempty" size="18"></uni-icons>
 					</view>
 				</view>
 				<view class="content">
-					<uni-rate v-model="userScore" allowHalf />
+					<uni-rate v-model="userScore" allowHalf :disabled="isScore" disabled-color="#FFCA3E" />
 					<text class="text">{{userScore}}分</text>
 				</view>
-				<view class="footer">
+				<view class="footer" v-show="!isScore">
 					<button @click="submiScore" :disabled="!userScore" type="default" size="mini" plain>确认评分</button>
 				</view>
 			</view>

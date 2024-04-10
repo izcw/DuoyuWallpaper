@@ -42,6 +42,8 @@
 		if (queryParams.pageSize > res.data.length) noData.value = true;
 		classList.value = [...classList.value, ...res.data]; // 刷新值，老数据和新数据拼接
 		
+		uni.setStorageSync("strogClassList",classList.value)
+		
 	}
 
 	// 骨架屏
@@ -58,7 +60,7 @@
 		<view class="content">
 			<uv-skeletons v-if="!classList.length  && !noData" v-for="item in 12" :loading="loading" :skeleton="skeleton" :animate="animate">
 			</uv-skeletons>
-			<navigator url="" v-for="item in classList" :key="item._id" class="item">
+			<navigator :url="'/pages/preView/preView?id='+item._id" v-for="item in classList" :key="item._id" class="item">
 				<image :src="item.smallPicurl" mode="aspectFill"></image>
 			</navigator>
 		</view>

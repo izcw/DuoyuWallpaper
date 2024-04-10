@@ -21,17 +21,7 @@
   "libVersion": "3.3.5",
   "appid": "wx1b8eb933ae3909eb",
   "projectname": "DuoyuWallpaper",
-  "condition": {
-    "miniprogram": {
-      "list": [
-        {
-          "name": "pages/preView/preView",
-          "pathName": "pages/preView/preView",
-          "query": ""
-        }
-      ]
-    }
-  },
+  "condition": {},
   "editorSetting": {
     "tabIndent": "insertSpaces",
     "tabSize": 2

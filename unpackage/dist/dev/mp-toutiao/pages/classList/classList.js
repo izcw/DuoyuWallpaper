@@ -44,6 +44,7 @@ const _sfc_main = {
       if (queryParams.pageSize > res.data.length)
         noData.value = true;
       classList.value = [...classList.value, ...res.data];
+      common_vendor.index.setStorageSync("strogClassList", classList.value);
     };
     let loading = common_vendor.ref(true);
     let animate = common_vendor.ref(true);
@@ -69,7 +70,8 @@ const _sfc_main = {
         d: common_vendor.f(classList.value, (item, k0, i0) => {
           return {
             a: item.smallPicurl,
-            b: item._id
+            b: "/pages/preView/preView?id=" + item._id,
+            c: item._id
           };
         }),
         e: classList.value.length || noData.value

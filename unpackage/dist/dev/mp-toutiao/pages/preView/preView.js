@@ -1,7 +1,8 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
-const common_assets = require("../../common/assets.js");
 require("../../utils/system.js");
+const api_apis = require("../../api/apis.js");
+require("../../utils/request.js");
 if (!Array) {
   const _easycom_uni_dateformat2 = common_vendor.resolveComponent("uni-dateformat");
   const _easycom_uni_icons2 = common_vendor.resolveComponent("uni-icons");
@@ -19,6 +20,19 @@ if (!Math) {
 const _sfc_main = {
   __name: "preView",
   setup(__props) {
+    const currentId = common_vendor.ref(null);
+    const currentIndex = common_vendor.ref(0);
+    const classList = common_vendor.ref([]);
+    const readImags = common_vendor.ref([]);
+    const currentInfo = common_vendor.ref(null);
+    const isScore = common_vendor.ref(false);
+    const strogClassList = common_vendor.index.getStorageSync("strogClassList") || [];
+    classList.value = strogClassList.map((item) => {
+      return {
+        ...item,
+        picurl: item.smallPicurl.replace("_small.webp", ".jpg")
+      };
+    });
     const maskState = common_vendor.ref(true);
     const maskChange = () => {
       maskState.value = !maskState.value;
@@ -33,87 +47,152 @@ const _sfc_main = {
     const scorePopup = common_vendor.ref(null);
     const userScore = common_vendor.ref(0);
     const clickScore = () => {
+      if (currentInfo.value.userScore) {
+        isScore.value = true;
+        userScore.value = currentInfo.value.userScore;
+      }
       scorePopup.value.open();
     };
     const clickScoreClose = () => {
       scorePopup.value.close();
+      userScore.value = 0;
+      isScore.value = false;
     };
-    const submiScore = () => {
-      console.log("确认评分");
-      scorePopup.value.close();
+    const submiScore = async () => {
+      common_vendor.index.showLoading({
+        title: "加载中..."
+      });
+      let {
+        classid,
+        _id: wallId
+      } = currentInfo.value;
+      let res = await api_apis.apiGetSetupScore({
+        classid,
+        wallId,
+        userScore: userScore.value
+      });
+      common_vendor.index.hideLoading();
+      if (res.errCode === 0) {
+        common_vendor.index.showToast({
+          title: "评分成功",
+          icon: "none"
+        });
+        classList.value[currentIndex.value].userScore = userScore.value;
+        common_vendor.index.setStorageSync("strogClassList", classList.value);
+        clickScoreClose();
+      }
     };
     common_vendor.index.getMenuButtonBoundingClientRect();
+    common_vendor.onLoad((e) => {
+      currentId.value = e.id;
+      currentIndex.value = classList.value.findIndex((item) => {
+        return item._id == currentId.value;
+      });
+      currentInfo.value = classList.value[currentIndex.value];
+      readImages();
+    });
+    const swiperChange = (e) => {
+      currentIndex.value = e.detail.current;
+      currentInfo.value = classList.value[currentIndex.value];
+      readImages();
+    };
+    const readImages = () => {
+      readImags.value.push(
+        currentIndex.value <= 0 ? classList.value.length - 1 : currentIndex.value - 1,
+        currentIndex.value,
+        currentIndex.value >= classList.value.length - 1 ? 0 : currentIndex.value + 1
+      );
+      readImags.value = [...new Set(readImags.value)];
+    };
     return (_ctx, _cache) => {
       return {
-        a: common_vendor.f(5, (item, k0, i0) => {
-          return {};
+        a: common_vendor.f(classList.value, (item, index, i0) => {
+          return common_vendor.e({
+            a: readImags.value.includes(index)
+          }, readImags.value.includes(index) ? {
+            b: common_vendor.o(maskChange),
+            c: item.picurl
+          } : {}, {
+            d: item._id
+          });
         }),
-        b: common_vendor.o(maskChange),
-        c: common_assets._imports_0,
-        d: common_vendor.p({
+        b: currentIndex.value,
+        c: common_vendor.o(swiperChange),
+        d: common_vendor.t(currentIndex.value + 1),
+        e: common_vendor.t(classList.value.length),
+        f: common_vendor.p({
           date: Date.now(),
           format: "hh:mm"
         }),
-        e: common_vendor.p({
+        g: common_vendor.p({
           date: Date.now(),
           format: "MM月dd日"
         }),
-        f: common_vendor.p({
+        h: common_vendor.p({
           type: "info",
           size: "20"
         }),
-        g: common_vendor.o(clickInfo),
-        h: common_vendor.p({
+        i: common_vendor.o(clickInfo),
+        j: common_vendor.p({
           type: "star",
           size: "20"
         }),
-        i: common_vendor.o(clickScore),
-        j: common_vendor.p({
+        k: common_vendor.t(currentInfo.value.score),
+        l: common_vendor.o(clickScore),
+        m: common_vendor.p({
           type: "download",
           size: "20"
         }),
-        k: maskState.value,
-        l: common_vendor.p({
+        n: maskState.value,
+        o: common_vendor.p({
           type: "closeempty",
           size: "18"
         }),
-        m: common_vendor.o(clickInfoClose),
-        n: common_vendor.o(($event) => _ctx.value = $event),
-        o: common_vendor.p({
-          value: "3",
+        p: common_vendor.o(clickInfoClose),
+        q: common_vendor.t(currentInfo.value._id),
+        r: common_vendor.t(currentInfo.value.nickname),
+        s: common_vendor.o(($event) => _ctx.value = $event),
+        t: common_vendor.p({
+          value: currentInfo.value.score,
           size: "16",
           readonly: true,
           touchable: true,
           modelValue: _ctx.value
         }),
-        p: common_vendor.f(9, (item, k0, i0) => {
+        v: common_vendor.t(currentInfo.value.score),
+        w: common_vendor.t(currentInfo.value.description),
+        x: common_vendor.f(currentInfo.value.tabs, (item, k0, i0) => {
           return {
             a: common_vendor.t(item)
           };
         }),
-        q: common_vendor.sr(infoPopup, "18cea5aa-5", {
+        y: common_vendor.sr(infoPopup, "18cea5aa-5", {
           "k": "infoPopup"
         }),
-        r: common_vendor.p({
+        z: common_vendor.p({
           type: "bottom"
         }),
-        s: common_vendor.p({
+        A: common_vendor.t(isScore.value ? "评分过了～" : "壁纸评分"),
+        B: common_vendor.p({
           type: "closeempty",
           size: "18"
         }),
-        t: common_vendor.o(clickScoreClose),
-        v: common_vendor.o(($event) => userScore.value = $event),
-        w: common_vendor.p({
+        C: common_vendor.o(clickScoreClose),
+        D: common_vendor.o(($event) => userScore.value = $event),
+        E: common_vendor.p({
           allowHalf: true,
+          disabled: isScore.value,
+          ["disabled-color"]: "#FFCA3E",
           modelValue: userScore.value
         }),
-        x: common_vendor.t(userScore.value),
-        y: common_vendor.o(submiScore),
-        z: !userScore.value,
-        A: common_vendor.sr(scorePopup, "18cea5aa-8", {
+        F: common_vendor.t(userScore.value),
+        G: common_vendor.o(submiScore),
+        H: !userScore.value,
+        I: !isScore.value,
+        J: common_vendor.sr(scorePopup, "18cea5aa-8", {
           "k": "scorePopup"
         }),
-        B: common_vendor.p({
+        K: common_vendor.p({
           type: "center",
           ["is-mask-click"]: false
         })

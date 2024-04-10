@@ -32,3 +32,11 @@ export function apiGetClassList(data={}){
 		data
 	})
 }
+
+// 评分
+export function apiGetSetupScore(data={}){
+	return request({
+		url:"/setupScore",
+		data
+	})
+}
