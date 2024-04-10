@@ -125,6 +125,83 @@
 		)
 		readImags.value = [...new Set(readImags.value)]
 	}
+
+	// 下载图片
+	const clickDownload = () => {
+		// #ifdef H5
+		uni.showModal({
+			content: "请长按保存壁纸",
+			showCancel: false
+		})
+		// #endif
+		// #ifndef H5
+		uni.showLoading({
+			title: "下载中...",
+			mask: true
+		})
+		// 小程序下获取网络图片信息需先配置download域名白名单才能生效。
+		// 开发者管理>服务器域名
+
+		// 如果没有出现允许下载本地弹窗需要设置：设置>服务内容声明>用户隐私保护指引,更新
+		uni.getImageInfo({
+			src: currentInfo.value.picurl,
+			success(res) {
+
+				uni.saveImageToPhotosAlbum({
+					filePath: res.path,
+					success(rest) {
+						uni.showToast({
+							title: "保存成功，请到相册查看",
+							icon: "none"
+						})
+					},
+					fail: err => {
+						if (err.errMsg == 'uni.saveImageToPhotosAlbum:fail cancel') {
+							uni.showToast({
+								title: "保存失败，请重新点击下载",
+								icon: "none"
+							})
+							return;
+						}
+
+						uni.showModal({
+							title: "授权提示",
+							content: "需要授权保存相册",
+							success: resh => {
+								if (resh.confirm) {
+									uni.openSetting({
+										success: (setting) => {
+											if (setting.authSetting[
+													'scope.writePhotosAlbum'
+												]) {
+												uni.showToast({
+													title: "获取授权成功",
+													icon: "none"
+												})
+											} else {
+												uni.showToast({
+													title: "获取授权失败！",
+													icon: "none"
+												})
+											}
+										}
+									})
+								}
+							}
+						})
+					},
+					complete: () => {
+						uni.hideLoading()
+					}
+				})
+
+			}
+		})
+
+
+
+		// #endif
+	}
 </script>
 
 <template>
@@ -163,7 +240,7 @@
 					<uni-icons type="star" size="20"></uni-icons>
 					<view class="text">{{currentInfo.score}}分</view>
 				</view>
-				<view class="box">
+				<view class="box" @click="clickDownload">
 					<uni-icons type="download" size="20"></uni-icons>
 					<view class="text">下载</view>
 				</view>
