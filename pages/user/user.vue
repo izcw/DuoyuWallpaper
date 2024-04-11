@@ -17,7 +17,7 @@
 		</view>
 		<view class="section">
 			<view class="list">
-				<navigator url="/pages/classList/classList" class="row" v-for="item in 3">
+				<navigator url="/pages/classList/classList" class="row" v-for="(item,index) in 3" :key="index">
 					<view class="left">
 						<uni-icons type="contact" size="20"></uni-icons>
 						<view class="text">我的下载</view>
@@ -46,7 +46,7 @@
 		</view>
 		<view class="section">
 			<view class="list">
-				<navigator url="/pages/classList/classList" class="row" v-for="item in 3">
+				<navigator url="/pages/classList/classList" class="row" v-for="(item,index) in 3" :key="index">
 					<view class="left">
 						<uni-icons type="contact" size="20"></uni-icons>
 						<view class="text">我的下载</view>
@@ -121,8 +121,11 @@
 							font-size: 34rpx;
 							color: #666;
 						}
-						:deep(){ //css控制，穿透组件内部
-							.uni-icons{
+
+						:deep() {
+
+							//css控制，穿透组件内部
+							.uni-icons {
 								color: $brand-theme-color !important;
 							}
 						}

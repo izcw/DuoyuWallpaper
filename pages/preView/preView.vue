@@ -10,7 +10,13 @@
 		onLoad
 	} from "@dcloudio/uni-app"
 	import {
-		apiGetSetupScore
+		onShareAppMessage,
+		onShareTimeline
+	} from "@dcloudio/uni-app"
+	import {
+		apiGetSetupScore,
+		apiWriteDownload,
+		apiDetaiWall
 	} from "@/api/apis.js"
 
 	const currentId = ref(null)
@@ -96,12 +102,32 @@
 
 	// 返回上一页
 	const goBack = () => {
-		uni.navigateBack()
+		uni.navigateBack({
+			success: () => {
+
+			},
+			fail(err) {
+				uni.reLaunch({
+					url: "/pages/index/index"
+				})
+			}
+		})
 	}
 
-	onLoad((e) => {
+	onLoad(async (e) => {
 		// 获取url id，知道点击的图片
 		currentId.value = e.id
+		if (e.type == 'share') {
+			let res = await apiDetaiWall({
+				id: currentId.value
+			})
+			classList.value = res.data.map(item => {
+				return {
+					...item,
+					picurl: item.smallPicurl.replace("_small.webp", ".jpg")
+				}
+			})
+		}
 		currentIndex.value = classList.value.findIndex(item => {
 			return item._id == currentId.value
 		})
@@ -127,7 +153,7 @@
 	}
 
 	// 下载图片
-	const clickDownload = () => {
+	const clickDownload = async () => {
 		// #ifdef H5
 		uni.showModal({
 			content: "请长按保存壁纸",
@@ -135,77 +161,111 @@
 		})
 		// #endif
 		// #ifndef H5
-		uni.showLoading({
-			title: "下载中...",
-			mask: true
-		})
-		// 小程序下获取网络图片信息需先配置download域名白名单才能生效。
-		// 开发者管理>服务器域名
+		try {
 
-		// 如果没有出现允许下载本地弹窗需要设置：设置>服务内容声明>用户隐私保护指引,更新
-		uni.getImageInfo({
-			src: currentInfo.value.picurl,
-			success(res) {
+			uni.showLoading({
+				title: "下载中...",
+				mask: true
+			})
 
-				uni.saveImageToPhotosAlbum({
-					filePath: res.path,
-					success(rest) {
-						uni.showToast({
-							title: "保存成功，请到相册查看",
-							icon: "none"
-						})
-					},
-					fail: err => {
-						if (err.errMsg == 'uni.saveImageToPhotosAlbum:fail cancel') {
+			let {
+				classid,
+				_id: wallId
+			} = currentInfo.value;
+			let res = await apiWriteDownload({
+				classid,
+				wallId
+			})
+			if (res.errCode != 0) throw res;
+			// 小程序下获取网络图片信息需先配置download域名白名单才能生效。
+			// 开发者管理>服务器域名
+
+			// 如果没有出现允许下载本地弹窗需要设置：设置>服务内容声明>用户隐私保护指引,更新
+			uni.getImageInfo({
+				src: currentInfo.value.picurl,
+				success(res) {
+
+					uni.saveImageToPhotosAlbum({
+						filePath: res.path,
+						success(rest) {
 							uni.showToast({
-								title: "保存失败，请重新点击下载",
+								title: "保存成功，请到相册查看",
 								icon: "none"
 							})
-							return;
-						}
-
-						uni.showModal({
-							title: "授权提示",
-							content: "需要授权保存相册",
-							success: resh => {
-								if (resh.confirm) {
-									uni.openSetting({
-										success: (setting) => {
-											if (setting.authSetting[
-													'scope.writePhotosAlbum'
-												]) {
-												uni.showToast({
-													title: "获取授权成功",
-													icon: "none"
-												})
-											} else {
-												uni.showToast({
-													title: "获取授权失败！",
-													icon: "none"
-												})
-											}
-										}
-									})
-								}
+						},
+						fail: err => {
+							if (err.errMsg == 'uni.saveImageToPhotosAlbum:fail cancel') {
+								uni.showToast({
+									title: "保存失败，请重新点击下载",
+									icon: "none"
+								})
+								return;
 							}
-						})
-					},
-					complete: () => {
-						uni.hideLoading()
-					}
-				})
 
-			}
-		})
+							uni.showModal({
+								title: "授权提示",
+								content: "需要授权保存相册",
+								success: resh => {
+									if (resh.confirm) {
+										uni.openSetting({
+											success: (setting) => {
+												if (setting
+													.authSetting[
+														'scope.writePhotosAlbum'
+													]) {
+													uni.showToast({
+														title: "获取授权成功",
+														icon: "none"
+													})
+												} else {
+													uni.showToast({
+														title: "获取授权失败！",
+														icon: "none"
+													})
+												}
+											}
+										})
+									}
+								}
+							})
+						},
+						complete: () => {
+							uni.hideLoading()
+						}
+					})
 
+				}
+			})
+
+		} catch (err) {
+			console.log(err);
+			uni.hideLoading()
+		}
 
 
 		// #endif
 	}
+
+	// 用户点击右上角分享
+	onShareAppMessage((e) => {
+		return {
+			title: "多鱼壁纸",
+			path: "/pages/preView/preView?id=" + currentId.value + "&type=share"
+		}
+	})
+
+	// 朋友圈
+	onShareTimeline((e) => {
+		return {
+			title: "多鱼壁纸",
+			query: "id=" + currentId.value + "&type=share"
+			// imageUrl:"https://picserver.duoyu.link/picfile/image/202403/31-1711876576139.webp"
+		}
+	})
 </script>
 
 <template>
-	<view class="preView">
+	<view class="preView" v-if="currentInfo">
 		<swiper circular :current="currentIndex" @change="swiperChange">
 			<swiper-item v-for="(item,index) in classList" :key="item._id">
 				<!-- v-if="index == currentIndex" 如果 index == currentIndex就渲染，节省带宽消耗-->
@@ -290,12 +350,14 @@
 						<view class="row">
 							<view class="label">标签： </view>
 							<view selectable class="value tabs">
-								<view class="tab" v-for="item in currentInfo.tabs">标签名{{item}}</view>
+								<view class="tab" v-for="(item,index) in currentInfo.tabs" :key="index">标签名{{item}}
+								</view>
 							</view>
 						</view>
 						<view class="copyright">
 							声明：本图片来用户投稿，非商业使用，用于免费学习交流，如侵犯了您的权益，您可以拷贝壁纸ID举报至平台，邮箱2405824084@qq.com，管理员将删除侵权壁纸，维护您的权益。
 						</view>
+						<view class="safe-area-inset-bottom"></view>
 					</view>
 				</scroll-view>
 			</view>

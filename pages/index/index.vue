@@ -1,7 +1,17 @@
 <script setup>
-import { ref } from 'vue';
-import {apiGetBanner,apiGetDayRandom,apiGetNotice,apiGetClassify} from "@/api/apis.js"
-
+	import {
+		ref
+	} from 'vue';
+	import {
+		apiGetBanner,
+		apiGetDayRandom,
+		apiGetNotice,
+		apiGetClassify
+	} from "@/api/apis.js"
+	import {
+		onShareAppMessage,
+		onShareTimeline
+	} from "@dcloudio/uni-app"
 
 	const bannerList = ref([])
 	const getBanner = async () => {
@@ -9,27 +19,58 @@ import {apiGetBanner,apiGetDayRandom,apiGetNotice,apiGetClassify} from "@/api/ap
 		bannerList.value = res.data
 	}
 	getBanner()
-	
+
 	const randomList = ref([])
 	const getDayRandom = async () => {
 		let res = await apiGetDayRandom()
 		randomList.value = res.data
 	}
 	getDayRandom()
-	
+
 	const noticeList = ref([])
 	const getNotice = async () => {
-		let res = await apiGetNotice({select:true})
+		let res = await apiGetNotice({
+			select: true
+		})
 		noticeList.value = res.data
 	}
 	getNotice()
-	
+
 	const classifyList = ref([])
 	const getClassify = async () => {
-		let res = await apiGetClassify({select:true})
+		let res = await apiGetClassify({
+			select: true
+		})
 		classifyList.value = res.data
 	}
 	getClassify()
+
+	// 跳转到预览页面
+	const goPreview = (id) => {
+		uni.setStorageSync("strogClassList", randomList.value)
+		uni.navigateTo({
+			url: "/pages/preView/preView?id=" + id
+		})
+	}
+
+
+	// 用户点击右上角分享
+	onShareAppMessage((e) => {
+		return {
+			title: "多鱼壁纸",
+			path: "/pages/index/index",
+			imageUrl: "https://picserver.duoyu.link/picfile/image/202403/31-1711876576139.webp"
+		}
+	})
+
+	// 朋友圈
+	onShareTimeline((e) => {
+		return {
+			title: "多鱼壁纸",
+			path: "/pages/index/index",
+			// imageUrl:"https://picserver.duoyu.link/picfile/image/202403/31-1711876576139.webp"
+		}
+	})
 </script>
 
 <template>
@@ -77,9 +118,9 @@ import {apiGetBanner,apiGetDayRandom,apiGetNotice,apiGetClassify} from "@/api/ap
 			</common-title>
 			<view class="content">
 				<scroll-view scroll-x>
-					<navigator url="/pages/preView/preView" class="box" v-for="item in randomList" :key="item._id">
+					<view @click="goPreview(item._id)" class="box" v-for="item in randomList" :key="item._id">
 						<image :src="item.smallPicurl" mode="aspectFill"></image>
-					</navigator>
+					</view>
 				</scroll-view>
 			</view>
 		</view><!-- 每日精选 -->

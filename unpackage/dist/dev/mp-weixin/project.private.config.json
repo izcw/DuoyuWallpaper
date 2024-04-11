@@ -3,5 +3,18 @@
   "projectname": "DuoyuWallpaper",
   "setting": {
     "compileHotReLoad": false
+  },
+  "condition": {
+    "miniprogram": {
+      "list": [
+        {
+          "name": "pages/classList/classList",
+          "pathName": "pages/classList/classList",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        }
+      ]
+    }
   }
 }

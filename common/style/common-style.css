@@ -11,11 +11,11 @@ swiper-item {
 	min-height: 80vh;
 }
 
-.loadingLayout{
+.loadingLayout {
 	padding: 30rpx 0;
 }
 
-.safe-area-inset-bottom{ /* 底部安全区 */
+/* 底部安全区 */
+.safe-area-inset-bottom {
 	height: env(safe-area-inset-bottom);
 }
-
