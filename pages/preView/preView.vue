@@ -137,7 +137,7 @@
 
 	// 改变swiper的index
 	const swiperChange = (e) => {
-		currentIndex.value = e.detail.current;
+		currentIndex.value = e.notice.current;
 		currentInfo.value = classList.value[currentIndex.value]
 		readImages()
 	}
@@ -322,12 +322,6 @@
 							<view class="label">壁纸ID： </view>
 							<text selectable class="value">{{currentInfo._id}}</text>
 						</view>
-						<!-- <view class="row">
-							<view class="label">分类： </view>
-							<text selectable class="value class">
-								明星美女
-							</text>
-						</view> -->
 						<view class="row">
 							<view class="label">发布者： </view>
 							<text selectable class="value class">

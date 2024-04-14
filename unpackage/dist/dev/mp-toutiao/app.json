@@ -6,7 +6,6 @@
     "pages/classList/classList",
     "pages/preView/preView",
     "pages/notice/notice",
-    "pages/notice/detail",
     "pages/search/search"
   ],
   "window": {

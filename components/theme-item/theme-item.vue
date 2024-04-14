@@ -1,5 +1,7 @@
 <script setup>
-	import {getTimeAgoDescription} from "@/utils/common.js"
+	import {
+		getTimeAgoDescription
+	} from "@/utils/common.js"
 	defineProps({
 		isMore: {
 			typeo: Boolean,
@@ -23,7 +25,8 @@
 		<navigator :url="'/pages/classList/classList?id='+item._id+'&name='+item.name" class="box" v-if="!isMore">
 			<image class="pic" :src="item.picurl" mode="aspectFill"></image>
 			<view class="mask">{{item.name}}</view>
-			<view class="tab">{{getTimeAgoDescription(item.updateTime)}}天前更新</view>
+			<view class="tab" v-if="getTimeAgoDescription(item.updateTime)">
+				{{getTimeAgoDescription(item.updateTime)}}天前更新</view>
 		</navigator>
 		<navigator url="/pages/classify/classify" open-type="reLaunch" class="box more" v-else>
 			<image class="pic" src="/common/images/more.jpg" mode="aspectFill"></image>

@@ -80,7 +80,13 @@
 			<swiper indicator-dots indicator-color="rgba(255,255,255,0.5)" indicator-active-color="#fff" autoplay
 				circular>
 				<swiper-item v-for="item in bannerList" :key="item._id">
-					<image :src="item.picurl" mode="aspectFill"></image>
+					<navigator v-if="item.target == 'miniProgram'" :url="item.url" target="miniProgram"
+						:app-id="item.appid" class="like">
+						<image :src="item.picurl" mode="aspectFill"></image>
+					</navigator>
+					<navigator v-else :url="`/pages/classList/classList?${item.url}`" class="like">
+						<image :src="item.picurl" mode="aspectFill"></image>
+					</navigator>
 				</swiper-item>
 			</swiper>
 		</view>
@@ -93,7 +99,7 @@
 			<view class="center">
 				<swiper vertical autoplay interval="1500" duration="300" circular>
 					<swiper-item v-for="item in noticeList" :key="item._id">
-						<navigator :url="'/pages/notice/detail?id='+item._id">
+						<navigator :url="'/pages/notice/notice?id='+item._id">
 							{{item.title}}
 						</navigator>
 					</swiper-item>
@@ -129,7 +135,7 @@
 			<common-title>
 				<template #name>专题精选</template>
 				<template #custom>
-					<navigator url="" class="more">More+</navigator>
+					<navigator url="/pages/classify/classify" open-type="reLaunch" class="more">More+</navigator>
 				</template>
 			</common-title>
 			<view class="content">
@@ -157,10 +163,15 @@
 					height: 100%;
 					padding: 0 30rpx;
 
-					image {
+					.like {
 						width: 100%;
 						height: 100%;
-						border-radius: 10rpx;
+
+						image {
+							width: 100%;
+							height: 100%;
+							border-radius: 10rpx;
+						}
 					}
 				}
 			}

@@ -46,14 +46,6 @@
 			"path" : "pages/notice/notice",
 			"style" : 
 			{
-				"navigationBarTitleText" : "公告",
-				"enablePullDownRefresh" : false
-			}
-		},
-		{
-			"path" : "pages/notice/detail",
-			"style" : 
-			{
 				"navigationBarTitleText" : "公告详情",
 				"enablePullDownRefresh" : false
 			}

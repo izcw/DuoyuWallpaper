@@ -39,7 +39,7 @@
 		uni.showLoading({
 			title: '搜索中'
 		});
-		historySearch.value = [...new Set([queryParams.value.keyword, ...historySearch.value])].slice(0,10)
+		historySearch.value = [...new Set([queryParams.value.keyword, ...historySearch.value])].slice(0, 10)
 		uni.setStorageSync("historySearch", historySearch.value)
 		initParams(queryParams.value.keyword);
 		SearchData();
@@ -98,16 +98,16 @@
 
 	// 
 	const SearchData = async () => {
-		try{
+		try {
 			let res = await apiSearchWall(queryParams.value)
 			classList.value = [...classList.value, ...res.data]
 			uni.setStorageSync("strogClassList", classList.value)
 			if (queryParams.value.pageSize > res.data.length) noData.value = true;
 			if (res.data.length == 0 && classList.value.length == 0) noSearch.value = true;
-		}finally{
+		} finally {
 			uni.hideLoading()
 		}
-		
+
 	}
 </script>
 

@@ -1,18 +1,22 @@
 import {
 	request
 } from "@/utils/request.js"
+
+// 首页海报列表
 export function apiGetBanner() {
 	return request({
 		url: "/homeBanner"
 	})
 }
 
+// 随机9张壁纸
 export function apiGetDayRandom() {
 	return request({
 		url: "/randomWall"
 	})
 }
 
+// 壁纸资讯公告列表
 export function apiGetNotice(data = {}) {
 	return request({
 		url: "/wallNewsList",
@@ -20,7 +24,7 @@ export function apiGetNotice(data = {}) {
 	})
 }
 
-
+// 壁纸大分类
 export function apiGetClassify(data = {}) {
 	return request({
 		url: "/classify",
@@ -28,6 +32,7 @@ export function apiGetClassify(data = {}) {
 	})
 }
 
+// 分类中壁纸列表（分类详情）
 export function apiGetClassList(data = {}) {
 	return request({
 		url: "/wallList",

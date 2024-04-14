@@ -1,10 +1,15 @@
 <script setup>
-	import {getStatusBarHeight,getTitleBarHeight,navBarHeight,getLeftIconLeft} from "@/utils/system.js"
+	import {
+		getStatusBarHeight,
+		getTitleBarHeight,
+		navBarHeight,
+		getLeftIconLeft
+	} from "@/utils/system.js"
 
 	defineProps({
-		title:{
-			type:String,
-			default:""
+		title: {
+			type: String,
+			default: ""
 		}
 	})
 </script>
