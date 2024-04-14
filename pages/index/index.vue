@@ -143,6 +143,19 @@
 				<theme-item isMore="true"></theme-item>
 			</view>
 		</view> <!-- 专题精选 -->
+		
+		<view class="selected">
+			<common-title>
+				<template #name>壁纸精选</template>
+				<template #custom>
+					<uni-icons type="fire" size="20"></uni-icons>
+				</template>
+			</common-title>
+			<view class="content">
+				<Wallpaper-Selection ></Wallpaper-Selection>
+			</view>
+		</view> <!-- 专题精选 -->
+		
 	</view>
 </template>
 
@@ -247,7 +260,6 @@
 				}
 
 				:deep() {
-
 					//css控制，穿透组件内部
 					.uni-icons {
 						color: $brand-theme-color !important;
@@ -300,6 +312,19 @@
 				gap: 15rpx;
 				grid-template-columns: repeat(3, 1fr);
 
+			}
+		}
+		.selected{
+			padding: 50rpx 0;
+			:deep() {
+				//css控制，穿透组件内部
+				.uni-icons {
+					color: $brand-theme-color !important;
+				}
+			}
+			.content {
+				margin-top: 30rpx;
+				padding: 0 30rpx;
 			}
 		}
 	}

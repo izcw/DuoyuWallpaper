@@ -33,7 +33,7 @@
 		} = e;
 		if (type) queryParams.type = type;
 		if (id) queryParams.classid = id;
-		// if (!id) gotoHome();
+		if (!id) gotoHome();
 
 		pageNamer = name
 		uni.setNavigationBarTitle({ // 设置标题名
