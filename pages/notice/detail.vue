@@ -48,7 +48,7 @@
 		<view class="count">
 			阅读 {{datail.view_count}}
 		</view>
-		<view class="safe-area-inset-bottom"></view>
+		<view class="loadingLayout"></view>
 	</view>
 
 </template>
