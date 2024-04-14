@@ -58,3 +58,20 @@ export function apiDetaiWall(data = {}) {
 		data
 	})
 }
+
+
+// 用户个人信息
+export function apiUserInfo(data = {}) {
+	return request({
+		url: "/userInfo",
+		data
+	})
+}
+
+// 我的评分/下载列表
+export function apiUserWallList(data = {}) {
+	return request({
+		url: "/userWallList",
+		data
+	})
+}

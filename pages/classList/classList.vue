@@ -8,7 +8,8 @@
 		onReachBottom
 	} from "@dcloudio/uni-app"
 	import {
-		apiGetClassList
+		apiGetClassList,
+		apiUserWallList
 	} from "@/api/apis.js"
 
 	import {
@@ -27,17 +28,19 @@
 	onLoad((e) => {
 		let {
 			id = null,
-				name = null
+				name = null,
+				type = null
 		} = e;
-		if (!id) gotoHome();
-		queryParams.classid = id;
+		if (type) queryParams.type = type;
+		if (id) queryParams.classid = id;
+		// if (!id) gotoHome();
 
 		pageNamer = name
-
 		uni.setNavigationBarTitle({ // 设置标题名
 			title: pageNamer
 		})
 
+		// 	执行获取分类列表的方法
 		getClassList()
 	})
 
@@ -50,8 +53,11 @@
 
 	const classList = ref([])
 	const noData = ref(false)
+	// 获取分类列表网络数据
 	const getClassList = async () => {
-		let res = await apiGetClassList(queryParams)
+		let res;
+		if (queryParams.classid) res = await apiGetClassList(queryParams);
+		if (queryParams.type) res = await apiUserWallList(queryParams);
 		if (queryParams.pageSize > res.data.length) noData.value = true;
 		classList.value = [...classList.value, ...res.data]; // 刷新值，老数据和新数据拼接
 

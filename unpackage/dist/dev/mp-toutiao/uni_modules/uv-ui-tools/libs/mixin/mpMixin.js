@@ -1,3 +1,1 @@
-"use strict";
-const mpMixin = {};
-exports.mpMixin = mpMixin;
+"use strict";const i={};exports.mpMixin=i;
