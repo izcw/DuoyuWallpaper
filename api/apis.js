@@ -75,3 +75,11 @@ export function apiUserWallList(data = {}) {
 		data
 	})
 }
+
+// 壁纸资讯公告详情
+export function apiWallNewsDetail(data = {}) {
+	return request({
+		url: "/wallNewsDetail",
+		data
+	})
+}
