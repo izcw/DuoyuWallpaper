@@ -7,7 +7,7 @@
     "newFeature": true
   },
   "appid": "testAppId",
-  "projectname": "DuoyuWallpaper",
+  "projectname": "多鱼壁纸",
   "condition": {
     "miniprogram": {
       "current": -1

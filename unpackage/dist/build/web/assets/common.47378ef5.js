@@ -1,0 +1,1 @@
+import{z as o,A as e}from"./index-fbe593d9.js";function t(o){const e=(new Date).getTime()-o,t=6e4,n=36e5,a=24*n,r=30*a;return e<t?"一分钟":e<n?Math.floor(e/t)+"分钟":e<a?Math.floor(e/n)+"小时":e<r?Math.floor(e/a)+"天":e<3*r?Math.floor(e/r)+"月":null}function n(){o({title:"提示",content:"页面有误将返回首页",showCancel:!1,success:o=>{o.confirm&&e({url:"/pages/index/index"})}})}export{n as a,t as g};

@@ -95,9 +95,15 @@
 		}
 	}
 
+	// #ifdef MP-WEIXIN
 	let {
 		height
 	} = uni.getMenuButtonBoundingClientRect(); //获取右上角胶囊按钮
+	// #endif
+	// #ifndef MP-WEIXIN
+	let height = "20"
+	// #endif
+
 
 
 	// 返回上一页
@@ -137,7 +143,8 @@
 
 	// 改变swiper的index
 	const swiperChange = (e) => {
-		currentIndex.value = e.notice.current;
+		console.log(e, "hjghjghjghjgj");
+		currentIndex.value = e.detail.current;
 		currentInfo.value = classList.value[currentIndex.value]
 		readImages()
 	}
@@ -278,6 +285,16 @@
 			<!-- #ifdef MP-WEIXIN -->
 			<view class="goBack" @click="goBack"
 				:style="{top:getStatusBarHeight()+'px',width:height+'px',height:height+'px'}">
+				<uni-icons type="back" color="#ccc" size="20"></uni-icons>
+			</view>
+			<!-- #endif -->
+			<!-- #ifdef H5 -->
+			<view class="goBack" @click="goBack" style="top: 10px ;left: 10px; width:28px ;height: 28px;">
+				<uni-icons type="back" color="#ccc" size="20"></uni-icons>
+			</view>
+			<!-- #endif -->
+			<!-- #ifdef APP -->
+			<view class="goBack" @click="goBack" style="top: 50px ;left: 20px; width:28px ;height: 28px;">
 				<uni-icons type="back" color="#ccc" size="20"></uni-icons>
 			</view>
 			<!-- #endif -->
